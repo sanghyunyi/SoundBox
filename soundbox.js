@@ -164,7 +164,7 @@ document.onkeypress = function() {
                                 audio[brakeactive].pause();
                                 audio[brakeactive].currentTime = 0;
                             }
-                        }, 500)
+                        }, 200)
                     })(1);
                 }
                 else {
@@ -196,7 +196,7 @@ document.onkeypress = function() {
                                 audio[brakeactive].pause();
                                 audio[brakeactive].currentTime = 0;
                             }
-                        }, 500)
+                        }, 200)
                     })(1);
                 }
             }
