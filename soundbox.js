@@ -83,18 +83,14 @@ space - 32
 function buttonpress() {
     //ensure single press
     if (!currentpress) {
-        //upkey
-        if (keys[38]) {
+        //w key
+        if (keys[87]) {
             selectedspeed++;
             currentpress = true;
         }
-        //downkey
-        if (keys[40]) {
+        //s key
+        if (keys[83]) {
             selectedspeed--;
-            currentpress = true;
-        }
-        //spacebar
-        if (keys[49]) {
             currentpress = true;
         }
 	}
