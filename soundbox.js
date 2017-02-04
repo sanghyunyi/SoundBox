@@ -7,14 +7,19 @@ var defaultspeed = 10;
 
 var background = 0;
 var whistle = 1;
-var draincut = 2;
+var drain = 2;
 var brake = 3;
-var injector = 4;
-var coasting = 5;
-var coal = 6;
+var injecting = 4;
+var drifting = 5;
+var coalshoveling = 6;
 var engine0 = 7;
 var engine1 = 8;
 var engine2 = 9;
+var brakeactive = 10;
+
+var indrift = false;
+var inbrake = false;
+var velocity = 0;
 
 //set audio files
 audio[background] = new Audio("d51/d51-background.mp3");
@@ -26,17 +31,17 @@ audio[background].addEventListener('timeupdate', function(){
                     this.play()
                 }}, false);
 audio[whistle] = new Audio("d51/d51-whistle.mp3");
-audio[draincut] = new Audio("d51/d51-draincut.mp3");
-audio[draincut].addEventListener('timeupdate', function(){
+audio[drain] = new Audio("d51/d51-drain.mp3");
+audio[drain].addEventListener('timeupdate', function(){
                 var buffer = 1.0
                 if(this.currentTime > this.duration - buffer){
                     this.currentTime = 1.0
                     this.play()
                 }}, false);
 audio[brake] = new Audio("d51/d51-brake.mp3");
-audio[injector] = new Audio("d51/d51-injector.mp3");
-audio[coasting] = new Audio("d51/d51-coasting.mp3");
-audio[coal] = new Audio("d51/d51-coal.mp3");
+audio[injecting] = new Audio("d51/d51-injecting.mp3");
+audio[drifting] = new Audio("d51/d51-drifting.mp3");
+audio[coalshoveling] = new Audio("d51/d51-coalshoveling.mp3");
 audio[engine0] = new Audio("d51/d51-engine0.mp3");
 audio[engine0].addEventListener('timeupdate', function(){
                 var buffer = 1.13
@@ -58,6 +63,14 @@ audio[engine2].addEventListener('timeupdate', function(){
                     this.currentTime = 0.8
                     this.play()
                 }}, false);
+audio[brakeactive] = new Audio("d51/d51-brakeactive.mp3");
+audio[brakeactive].addEventListener('timeupdate', function(){
+                var buffer = 1.0
+                if(this.currentTime > this.duration - buffer){
+                    this.currentTime = 0.8
+                    this.play()
+                }}, false);
+
 
 window.addEventListener("keyup", function (e) {
     delete keys[e.keyCode];
@@ -87,11 +100,13 @@ function buttonpress() {
         if (keys[87]) {
             selectedspeed++;
             currentpress = true;
+            indrift = false;
         }
         //s key
         if (keys[83]) {
             selectedspeed--;
             currentpress = true;
+            indrift = false;
         }
 	}
 	if (selectedspeed > 52) {
@@ -106,29 +121,122 @@ document.onkeypress = function() {
         audio[whistle].play();
     }
     if (event.keyCode == 51) {
-        audio[brake].play();
+        if (selectedspeed == 10) {
+            audio[brake].play();
+            inbrake = false;
+        }
+        else {
+            if (inbrake) {
+                audio[brakeactive].pause();
+                audio[brakeactive].currentTime = 0;
+                inbrake = false;
+            }
+            else{
+                inbrake = true;
+                audio[brakeactive].play();
+                if (indrift) {
+                   (function myLoop (i) {         
+                        setTimeout(function () {   
+                            if (selectedspeed <= 10) {
+                                selectedspeed = 10;
+                                velocity = 0;
+                                audio[brakeactive].pause();
+                                audio[brakeactive].currentTime = 0;
+                            }
+                            else if ((selectedspeed > 10) && (selectedspeed <= 24)) {
+                                selectedspeed -= 2;
+                                velocity = 5 * (selectedspeed - 1) / 10;
+                            }
+                            else if ((selectedspeed > 24) && (selectedspeed <= 41)) {
+                                selectedspeed -= 10/12;
+                                velocity = 12 * (selectedspeed - 15) / 10;
+                            }
+                            else if ((selectedspeed > 41) && (selectedspeed <= 52)) {
+                                selectedspeed -= 10/34;
+                                velocity = 34 * (selectedspeed -32) / 10;
+                            }
+                            document.getElementById("speed").innerHTML = velocity.toFixed(2);
+                            playspeed = selectedspeed;
+                            if ((selectedspeed > 10) && inbrake) {
+                                myLoop(i);
+                            }
+                            else {
+                                audio[brakeactive].pause();
+                                audio[brakeactive].currentTime = 0;
+                            }
+                        }, 500)
+                    })(1);
+                }
+                else {
+                    (function myLoop (i) {         
+                        setTimeout(function () {   
+                            if (selectedspeed <= 10) {
+                                selectedspeed = 10;
+                                velocity = 0;
+                                audio[brakeactive].pause();
+                                audio[brakeactive].currentTime = 0;
+                            }
+                            else if ((selectedspeed > 10) && (selectedspeed <= 24)) {
+                                selectedspeed -= 2;
+                                velocity = 5 * (selectedspeed - 1) / 10;
+                            }
+                            else if ((selectedspeed > 24) && (selectedspeed <= 41)) {
+                                selectedspeed -= 10/12;
+                                velocity = 12 * (selectedspeed - 15) / 10;
+                            }
+                            else if ((selectedspeed > 41) && (selectedspeed <= 52)) {
+                                selectedspeed -= 10/34;
+                                velocity = 34 * (selectedspeed -32) / 10;
+                            }
+                            document.getElementById("speed").innerHTML = velocity.toFixed(2);
+                            if ((selectedspeed > 10) && inbrake){
+                                myLoop(i);
+                            }
+                            else {
+                                audio[brakeactive].pause();
+                                audio[brakeactive].currentTime = 0;
+                            }
+                        }, 500)
+                    })(1);
+                }
+            }
+        }
     }
     if (event.keyCode == 52) {
-        audio[injector].play();
+        audio[injecting].play();
     }
     if (event.keyCode == 53) {
-        audio[coasting].play();
+        if (selectedspeed == 10) {
+            audio[drifting].play();
+            indrift = false;
+        }
+        else {
+            if (indrift) {
+                selectedspeed -= 1;
+                indrift= false;
+            }
+            else {
+                audio[engine0].pause();
+                audio[engine1].pause();
+                audio[engine2].pause();
+                indrift = true;
+            }
+        }
     }
     if (event.keyCode == 54) {
-        audio[coal].play();
+        audio[coalshoveling].play();
     }
-
 };
 
 document.onkeydown = function() {
     if (event.keyCode == 50) {
-        audio[draincut].play();
+        audio[drain].play();
     }
 }
 
 document.onkeyup = function() {
     if (event.keyCode == 50) {
-        audio[draincut].pause();
+        audio[drain].pause();
     }
 }
 
@@ -136,39 +244,49 @@ setInterval(function () {
     console.log(selectedspeed + "+" + currentpress);
     buttonpress();
 	if (playspeed !== selectedspeed) {
+        wasdrift = false;
         if (selectedspeed == 10) {
             playspeed = selectedspeed;
-            document.getElementById("speed").innerHTML = 0;
+            velocity = 0;
+            audio[drifting].pause();
+            audio[drifting].currentTime = 0;
             audio[engine0].pause();
             audio[engine1].pause();
             audio[engine2].pause();
         }
-        else if ((selectedspeed > 10) && (selectedspeed <= 24)){
+        else if ((selectedspeed > 10) && (selectedspeed <= 24)) {
 		    playspeed = selectedspeed;
-            document.getElementById("speed").innerHTML = 5 * (selectedspeed - 1) / 10;
+            velocity = 5 * (selectedspeed - 1) / 10;
+            audio[drifting].pause();
+            audio[drifting].currentTime = 0;
             audio[engine1].pause();
             audio[engine2].pause();
 		    audio[engine0].playbackRate = (playspeed - 1) / 10;
             audio[engine0].play();
         }
-        else if ((selectedspeed > 24) && (selectedspeed <= 41)){
+        else if ((selectedspeed > 24) && (selectedspeed <= 41)) {
             playspeed = selectedspeed;
-            document.getElementById("speed").innerHTML = 12 * (selectedspeed - 15) / 10;
+            velocity = 12 * (selectedspeed - 15) / 10;
+            audio[drifting].pause();
+            audio[drifting].currentTime = 0;
             audio[engine0].pause();
             audio[engine2].pause();
             audio[engine1].playbackRate = (playspeed - 15) / 10;
             audio[engine1].play();
         }
-        else if ((selectedspeed > 41) && (selectedspeed <= 52)){
+        else if ((selectedspeed > 41) && (selectedspeed <= 52)) {
             playspeed = selectedspeed;
-            document.getElementById("speed").innerHTML = 34 * (selectedspeed -32) / 10;
+            velocity = 34 * (selectedspeed -32) / 10;
+            audio[drifting].pause();
+            audio[drifting].currentTime = 0;
             audio[engine0].pause();
             audio[engine1].pause();
             audio[engine2].playbackRate = (playspeed - 32) / 10;
             audio[engine2].play();
         }
+        document.getElementById("speed").innerHTML = velocity.toFixed(2);
 	}
 }, 10);
 audio[background].playbackRate = defaultspeed / 10;
 audio[background].play();
-document.getElementById("speed").innerHTML = 0;
+document.getElementById("speed").innerHTML = velocity.toFixed(2);
