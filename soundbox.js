@@ -14,31 +14,31 @@ var engine2 = 4;
 audio[background] = new Audio("d51/d51-background.mp3");
 audio[background].loop = true;
 audio[background].addEventListener('timeupdate', function(){
-                var buffer = .3
+                var buffer = 1.0
                 if(this.currentTime > this.duration - buffer){
-                    this.currentTime = 0.05
+                    this.currentTime = 1.0
                     this.play()
                 }}, false);
 audio[whistle] = new Audio("d51/d51-whistle.mp3");
 audio[engine0] = new Audio("d51/d51-engine0.mp3");
 audio[engine0].addEventListener('timeupdate', function(){
-                var buffer = .3
+                var buffer = 1.17
                 if(this.currentTime > this.duration - buffer){
-                    this.currentTime = 0.10
+                    this.currentTime = 0.3
                     this.play()
                 }}, false);
 audio[engine1] = new Audio("d51/d51-engine1.mp3");
 audio[engine1].addEventListener('timeupdate', function(){
-                var buffer = .3
+                var buffer = 1.0
                 if(this.currentTime > this.duration - buffer){
-                    this.currentTime = 0.10
+                    this.currentTime = 1.0
                     this.play()
                 }}, false);
 audio[engine2] = new Audio("d51/d51-engine2.mp3");
 audio[engine2].addEventListener('timeupdate', function(){
-                var buffer = .3
+                var buffer = 1.0
                 if(this.currentTime > this.duration - buffer){
-                    this.currentTime = 0.10
+                    this.currentTime = 0.8
                     this.play()
                 }}, false);
 
