@@ -4,11 +4,17 @@ var currentpress = false;
 var selectedspeed = 10;
 var playspeed = 10;
 var defaultspeed = 10;
+
 var background = 0;
 var whistle = 1;
-var engine0 = 2;
-var engine1 = 3;
-var engine2 = 4;
+var draincut = 2;
+var brake = 3;
+var injector = 4;
+var coasting = 5;
+var coal = 6;
+var engine0 = 7;
+var engine1 = 8;
+var engine2 = 9;
 
 //set audio files
 audio[background] = new Audio("d51/d51-background.mp3");
@@ -20,6 +26,17 @@ audio[background].addEventListener('timeupdate', function(){
                     this.play()
                 }}, false);
 audio[whistle] = new Audio("d51/d51-whistle.mp3");
+audio[draincut] = new Audio("d51/d51-draincut.mp3");
+audio[draincut].addEventListener('timeupdate', function(){
+                var buffer = 1.0
+                if(this.currentTime > this.duration - buffer){
+                    this.currentTime = 1.0
+                    this.play()
+                }}, false);
+audio[brake] = new Audio("d51/d51-brake.mp3");
+audio[injector] = new Audio("d51/d51-injector.mp3");
+audio[coasting] = new Audio("d51/d51-coasting.mp3");
+audio[coal] = new Audio("d51/d51-coal.mp3");
 audio[engine0] = new Audio("d51/d51-engine0.mp3");
 audio[engine0].addEventListener('timeupdate', function(){
                 var buffer = 1.13
@@ -51,16 +68,16 @@ window.addEventListener("keydown", function (e) {
     keys[e.keyCode] = true;
 }, false);
 
-window.addEventListener("spacebar", function (e) {
-    keys[e.keyCode] = true;
-}, false);
-
 /*
 up - 38
 down - 40
 left - 37
 right 39
 space - 32
+1 - 49
+2 - 50
+...
+6 - 54
 */
 
 function buttonpress() {
@@ -77,7 +94,7 @@ function buttonpress() {
             currentpress = true;
         }
         //spacebar
-        if (keys[32]) {
+        if (keys[49]) {
             currentpress = true;
         }
 	}
@@ -89,10 +106,35 @@ function buttonpress() {
 }
 
 document.onkeypress = function() {
-    if (event.keyCode == 32) {
+    if (event.keyCode == 49) {
         audio[whistle].play();
     }
+    if (event.keyCode == 51) {
+        audio[brake].play();
+    }
+    if (event.keyCode == 52) {
+        audio[injector].play();
+    }
+    if (event.keyCode == 53) {
+        audio[coasting].play();
+    }
+    if (event.keyCode == 54) {
+        audio[coal].play();
+    }
+
 };
+
+document.onkeydown = function() {
+    if (event.keyCode == 50) {
+        audio[draincut].play();
+    }
+}
+
+document.onkeyup = function() {
+    if (event.keyCode == 50) {
+        audio[draincut].pause();
+    }
+}
 
 setInterval(function () {
     console.log(selectedspeed + "+" + currentpress);

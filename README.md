@@ -5,4 +5,5 @@ The mp3 sound files are from youtube.
 ## usage
 1. download
 2. open index.html using chrome
-3. upkey: speed up, downkey: speed down, spacebar: whistle
+3. upkey: speed up, downkey: speed down, 1: whistle, 2: drain cut, 3: brake, 4: injector, 5: coasting, 6: coal
+
