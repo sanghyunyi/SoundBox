@@ -1,5 +1,5 @@
 # SoundBox
-Sound effect for model train d-51.
+Sound effects for model train d51.
 The mp3 sound files are from youtube.
 
 ## usage
