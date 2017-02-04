@@ -22,7 +22,7 @@ audio[background].addEventListener('timeupdate', function(){
 audio[whistle] = new Audio("d51/d51-whistle.mp3");
 audio[engine0] = new Audio("d51/d51-engine0.mp3");
 audio[engine0].addEventListener('timeupdate', function(){
-                var buffer = 1.17
+                var buffer = 1.13
                 if(this.currentTime > this.duration - buffer){
                     this.currentTime = 0.3
                     this.play()
