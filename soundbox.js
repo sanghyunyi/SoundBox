@@ -241,10 +241,9 @@ document.onkeyup = function() {
 }
 
 setInterval(function () {
-    console.log(selectedspeed + "+" + currentpress);
+    console.log(selectedspeed);// + "+" + currentpress);
     buttonpress();
 	if (playspeed !== selectedspeed) {
-        wasdrift = false;
         if (selectedspeed == 10) {
             playspeed = selectedspeed;
             velocity = 0;
