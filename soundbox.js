@@ -157,7 +157,7 @@ document.onkeypress = function() {
                             }
                             document.getElementById("speed").innerHTML = velocity.toFixed(2);
                             playspeed = selectedspeed;
-                            if ((selectedspeed > 10) && inbrake) {
+                            if ((selectedspeed > 10) && inbrake && indrift) {
                                 myLoop(i);
                             }
                             else {
@@ -189,7 +189,7 @@ document.onkeypress = function() {
                                 velocity = 34 * (selectedspeed -32) / 10;
                             }
                             document.getElementById("speed").innerHTML = velocity.toFixed(2);
-                            if ((selectedspeed > 10) && inbrake){
+                            if ((selectedspeed > 10) && inbrake && !indrift){
                                 myLoop(i);
                             }
                             else {
