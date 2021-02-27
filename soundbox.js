@@ -93,6 +93,10 @@ space - 32
 6 - 54
 */
 
+var speed1 = 3.5;
+var speed2 = 8.4;
+var speed3 = 26.4;
+
 function buttonpress() {
     //ensure single press
     if (!currentpress) {
@@ -109,8 +113,8 @@ function buttonpress() {
             indrift = false;
         }
 	}
-	if (selectedspeed > 52) {
-		selectedspeed = 52;
+	if (selectedspeed > 65) {
+		selectedspeed = 65;
 	} else if (selectedspeed < 10) {
 		selectedspeed = 10;
 	}
@@ -145,15 +149,15 @@ document.onkeypress = function() {
                             }
                             else if ((selectedspeed > 10) && (selectedspeed <= 24)) {
                                 selectedspeed -= 2;
-                                velocity = 5 * (selectedspeed - 1) / 10;
+                                velocity = speed1 * (selectedspeed - 1) / 10;
                             }
                             else if ((selectedspeed > 24) && (selectedspeed <= 41)) {
-                                selectedspeed -= 10/12;
-                                velocity = 12 * (selectedspeed - 15) / 10;
+                                selectedspeed -= 10/speed2;
+                                velocity = speed2 * (selectedspeed - 15) / 10;
                             }
-                            else if ((selectedspeed > 41) && (selectedspeed <= 52)) {
-                                selectedspeed -= 10/34;
-                                velocity = 34 * (selectedspeed -32) / 10;
+                            else if ((selectedspeed > 41) && (selectedspeed <= 65)) {
+                                selectedspeed -= 10/speed3;
+                                velocity = speed3 * (selectedspeed -32) / 10;
                             }
                             document.getElementById("speed").innerHTML = velocity.toFixed(2);
                             playspeed = selectedspeed;
@@ -178,15 +182,15 @@ document.onkeypress = function() {
                             }
                             else if ((selectedspeed > 10) && (selectedspeed <= 24)) {
                                 selectedspeed -= 2;
-                                velocity = 5 * (selectedspeed - 1) / 10;
+                                velocity = speed1 * (selectedspeed - 1) / 10;
                             }
                             else if ((selectedspeed > 24) && (selectedspeed <= 41)) {
-                                selectedspeed -= 10/12;
-                                velocity = 12 * (selectedspeed - 15) / 10;
+                                selectedspeed -= 10/speed2;
+                                velocity = speed2 * (selectedspeed - 15) / 10;
                             }
-                            else if ((selectedspeed > 41) && (selectedspeed <= 52)) {
-                                selectedspeed -= 10/34;
-                                velocity = 34 * (selectedspeed -32) / 10;
+                            else if ((selectedspeed > 41) && (selectedspeed <= 65)) {
+                                selectedspeed -= 10/speed3;
+                                velocity = speed3 * (selectedspeed -32) / 10;
                             }
                             document.getElementById("speed").innerHTML = velocity.toFixed(2);
                             if ((selectedspeed > 10) && inbrake && !indrift){
@@ -255,7 +259,7 @@ setInterval(function () {
         }
         else if ((selectedspeed > 10) && (selectedspeed <= 24)) {
 		    playspeed = selectedspeed;
-            velocity = 5 * (selectedspeed - 1) / 10;
+            velocity = speed1 * (selectedspeed - 1) / 10;
             audio[drifting].pause();
             audio[drifting].currentTime = 0;
             audio[engine1].pause();
@@ -265,7 +269,7 @@ setInterval(function () {
         }
         else if ((selectedspeed > 24) && (selectedspeed <= 41)) {
             playspeed = selectedspeed;
-            velocity = 12 * (selectedspeed - 15) / 10;
+            velocity = speed2 * (selectedspeed - 15) / 10;
             audio[drifting].pause();
             audio[drifting].currentTime = 0;
             audio[engine0].pause();
@@ -273,9 +277,9 @@ setInterval(function () {
             audio[engine1].playbackRate = (playspeed - 15) / 10;
             audio[engine1].play();
         }
-        else if ((selectedspeed > 41) && (selectedspeed <= 52)) {
+        else if ((selectedspeed > 41) && (selectedspeed <= 65)) {
             playspeed = selectedspeed;
-            velocity = 34 * (selectedspeed -32) / 10;
+            velocity = speed3 * (selectedspeed -32) / 10;
             audio[drifting].pause();
             audio[drifting].currentTime = 0;
             audio[engine0].pause();
